@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"os"
 	"strings"
+
+	"github.com/alexislozano/go-raytracing/vec3"
 )
 
 func main() {
@@ -15,13 +17,15 @@ func main() {
 
 	for j := imageHeight - 1; j >= 0; j -= 1 {
 		for i := 0; i < imageWidth; i += 1 {
-			r := float64(i) / (imageWidth)
-			g := float64(j) / (imageHeight)
-			b := 0.2
+			color := vec3.Vec3{
+				X: float64(i) / (imageWidth),
+				Y: float64(j) / (imageHeight),
+				Z: 0.2,
+			}
 
-			ir := int(255.99 * r)
-			ig := int(255.99 * g)
-			ib := int(255.99 * b)
+			ir := int(255.99 * color.X)
+			ig := int(255.99 * color.Y)
+			ib := int(255.99 * color.Z)
 
 			image.WriteString(fmt.Sprintf("%d %d %d\n", ir, ig, ib))
 		}
