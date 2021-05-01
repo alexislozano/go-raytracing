@@ -24,6 +24,10 @@ func Add3(v1 Vec3, v2 Vec3, v3 Vec3) Vec3 {
 	return Vec3{v1.X + v2.X + v3.X, v1.Y + v2.Y + v3.Y, v1.Z + v2.Z + v3.Z}
 }
 
+func Add4(v1 Vec3, v2 Vec3, v3 Vec3, v4 Vec3) Vec3 {
+	return Vec3{v1.X + v2.X + v3.X + v4.X, v1.Y + v2.Y + v3.Y + v4.Y, v1.Z + v2.Z + v3.Z + v4.Z}
+}
+
 func Sub(v1 Vec3, v2 Vec3) Vec3 {
 	return Vec3{v1.X - v2.X, v1.Y - v2.Y, v1.Z - v2.Z}
 }
@@ -58,4 +62,8 @@ func Cross(v1 Vec3, v2 Vec3) Vec3 {
 		v1.Z*v2.X - v1.X*v2.Z,
 		v1.X*v2.Y - v1.Y*v2.X,
 	}
+}
+
+func Neg(v Vec3) Vec3 {
+	return Vec3{-v.X, -v.Y, -v.Z}
 }

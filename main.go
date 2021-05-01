@@ -3,9 +3,11 @@ package main
 import (
 	"fmt"
 	"math"
+	"math/rand"
 	"os"
 	"strings"
 
+	"github.com/alexislozano/go-raytracing/camera"
 	"github.com/alexislozano/go-raytracing/hitable"
 	"github.com/alexislozano/go-raytracing/ray"
 	"github.com/alexislozano/go-raytracing/vec3"
@@ -32,36 +34,33 @@ func color(r *ray.Ray, world hitable.Hitable) vec3.Vec3 {
 func main() {
 	const imageWidth = 200
 	const imageHeight = 100
+	const raysPerPixel = 100
 
 	var image strings.Builder
 	image.WriteString(fmt.Sprintf("P3\n%d %d\n255\n", imageWidth, imageHeight))
-
-	lower_left := vec3.Vec3{X: -2.0, Y: -1.0, Z: -1.0}
-	horizontal := vec3.Vec3{X: 4.0, Y: 0.0, Z: 0.0}
-	vertical := vec3.Vec3{X: 0.0, Y: 2.0, Z: 0.0}
-	origin := vec3.Vec3{X: 0.0, Y: 0.0, Z: 0.0}
 
 	list := []hitable.Hitable{
 		&hitable.Sphere{Center: vec3.Vec3{X: 0.0, Y: 0.0, Z: -1.0}, Radius: 0.5},
 		&hitable.Sphere{Center: vec3.Vec3{X: 0.0, Y: -100.5, Z: -1.0}, Radius: 100},
 	}
 	world := hitable.HitableList{List: list}
+	cam := camera.New()
 
-	for j := imageHeight - 1; j >= 0; j -= 1 {
-		for i := 0; i < imageWidth; i += 1 {
-			u := float64(i) / (imageWidth)
-			v := float64(j) / (imageHeight)
+	for j := imageHeight - 1; j >= 0; j-- {
+		for i := 0; i < imageWidth; i++ {
+			col := vec3.Vec3{X: 0, Y: 0, Z: 0}
+			for s := 0; s < raysPerPixel; s++ {
+				u := (float64(i) + rand.Float64()) / imageWidth
+				v := (float64(j) + rand.Float64()) / imageHeight
+				r := cam.GetRay(u, v)
+				col = vec3.Add(col, color(&r, &world))
+			}
 
-			r := ray.Ray{Origin: origin, Direction: vec3.Add3(
-				lower_left,
-				vec3.MulCoeff(horizontal, u),
-				vec3.MulCoeff(vertical, v),
-			)}
-			color := color(&r, &world)
+			col = vec3.DivCoeff(col, raysPerPixel)
 
-			ir := int(255.99 * color.X)
-			ig := int(255.99 * color.Y)
-			ib := int(255.99 * color.Z)
+			ir := int(255.99 * col.X)
+			ig := int(255.99 * col.Y)
+			ib := int(255.99 * col.Z)
 
 			image.WriteString(fmt.Sprintf("%d %d %d\n", ir, ig, ib))
 		}
