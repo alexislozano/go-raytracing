@@ -9,7 +9,19 @@ import (
 	"github.com/alexislozano/go-raytracing/vec3"
 )
 
+func hitSphere(center vec3.Vec3, radius float64, r *ray.Ray) bool {
+	oc := vec3.Sub(r.Origin, center)
+	a := vec3.Dot(r.Direction, r.Direction)
+	b := 2.0 * vec3.Dot(oc, r.Direction)
+	c := vec3.Dot(oc, oc) - radius*radius
+	discriminant := b*b - 4*a*c
+	return discriminant > 0
+}
+
 func color(r *ray.Ray) vec3.Vec3 {
+	if (hitSphere(vec3.Vec3{X: 0.0, Y: 0.0, Z: -1.0}, 0.5, r)) {
+		return vec3.Vec3{X: 1.0, Y: 0.0, Z: 0.0}
+	}
 	unitDirection := r.Direction.Unit()
 	t := 0.5 * (unitDirection.Y + 1.0)
 	return vec3.Add(
