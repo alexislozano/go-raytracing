@@ -3,16 +3,18 @@ package hitable
 import (
 	"math"
 
+	"github.com/alexislozano/go-raytracing/material"
 	"github.com/alexislozano/go-raytracing/ray"
 	"github.com/alexislozano/go-raytracing/vec3"
 )
 
 type Sphere struct {
-	Center vec3.Vec3
-	Radius float64
+	Center   vec3.Vec3
+	Radius   float64
+	Material material.Material
 }
 
-func (s *Sphere) Hit(r *ray.Ray, tMin float64, tMax float64) (bool, HitRecord) {
+func (s *Sphere) Hit(r *ray.Ray, tMin float64, tMax float64) (bool, HitRecord, material.Material) {
 	rec := HitRecord{
 		tMax,
 		vec3.Vec3{X: 0.0, Y: 0.0, Z: 0.0},
@@ -29,15 +31,15 @@ func (s *Sphere) Hit(r *ray.Ray, tMin float64, tMax float64) (bool, HitRecord) {
 			rec.t = temp
 			rec.P = r.Point(temp)
 			rec.Normal = vec3.DivCoeff(vec3.Sub(rec.P, s.Center), s.Radius)
-			return true, rec
+			return true, rec, s.Material
 		}
 		temp = (-b + math.Sqrt(b*b-a*c)) / a
 		if temp < tMax && temp > tMin {
 			rec.t = temp
 			rec.P = r.Point(temp)
 			rec.Normal = vec3.DivCoeff(vec3.Sub(rec.P, s.Center), s.Radius)
-			return true, rec
+			return true, rec, s.Material
 		}
 	}
-	return false, rec
+	return false, rec, s.Material
 }

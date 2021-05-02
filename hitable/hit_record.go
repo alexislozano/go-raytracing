@@ -1,6 +1,8 @@
 package hitable
 
-import "github.com/alexislozano/go-raytracing/vec3"
+import (
+	"github.com/alexislozano/go-raytracing/vec3"
+)
 
 type HitRecord struct {
 	t      float64

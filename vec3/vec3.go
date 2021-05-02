@@ -1,6 +1,9 @@
 package vec3
 
-import "math"
+import (
+	"math"
+	"math/rand"
+)
 
 type Vec3 struct {
 	X float64
@@ -66,4 +69,19 @@ func Cross(v1 Vec3, v2 Vec3) Vec3 {
 
 func Neg(v Vec3) Vec3 {
 	return Vec3{-v.X, -v.Y, -v.Z}
+}
+
+func RandomInUnitSphere() Vec3 {
+	p := Vec3{X: 1, Y: 1, Z: 1}
+	for p.SquaredLength() >= 1 {
+		p = Sub(
+			MulCoeff(Vec3{
+				rand.Float64(),
+				rand.Float64(),
+				rand.Float64(),
+			}, 2),
+			Vec3{X: 1, Y: 1, Z: 1},
+		)
+	}
+	return p
 }
