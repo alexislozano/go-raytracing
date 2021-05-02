@@ -27,15 +27,15 @@ func (s *Sphere) Hit(r *ray.Ray, tMin float64, tMax float64) (bool, HitRecord) {
 		temp := (-b - math.Sqrt(b*b-a*c)) / a
 		if temp < tMax && temp > tMin {
 			rec.t = temp
-			rec.p = r.Point(temp)
-			rec.Normal = vec3.DivCoeff(vec3.Sub(rec.p, s.Center), s.Radius)
+			rec.P = r.Point(temp)
+			rec.Normal = vec3.DivCoeff(vec3.Sub(rec.P, s.Center), s.Radius)
 			return true, rec
 		}
 		temp = (-b + math.Sqrt(b*b-a*c)) / a
 		if temp < tMax && temp > tMin {
 			rec.t = temp
-			rec.p = r.Point(temp)
-			rec.Normal = vec3.DivCoeff(vec3.Sub(rec.p, s.Center), s.Radius)
+			rec.P = r.Point(temp)
+			rec.Normal = vec3.DivCoeff(vec3.Sub(rec.P, s.Center), s.Radius)
 			return true, rec
 		}
 	}

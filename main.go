@@ -13,14 +13,29 @@ import (
 	"github.com/alexislozano/go-raytracing/vec3"
 )
 
+func randomInUnitSphere() vec3.Vec3 {
+	p := vec3.Vec3{X: 1, Y: 1, Z: 1}
+	for p.SquaredLength() >= 1 {
+		p = vec3.Sub(
+			vec3.MulCoeff(vec3.Vec3{
+				X: rand.Float64(),
+				Y: rand.Float64(),
+				Z: rand.Float64(),
+			}, 2),
+			vec3.Vec3{X: 1, Y: 1, Z: 1},
+		)
+	}
+	return p
+}
+
 func color(r *ray.Ray, world hitable.Hitable) vec3.Vec3 {
-	hit, rec := world.Hit(r, 0.0, math.MaxFloat64)
+	hit, rec := world.Hit(r, 0.001, math.MaxFloat64)
 	if hit {
-		return vec3.MulCoeff(vec3.Vec3{
-			X: rec.Normal.X + 1,
-			Y: rec.Normal.Y + 1,
-			Z: rec.Normal.Z + 1,
-		}, 0.5)
+		target := vec3.Add3(rec.P, rec.Normal, randomInUnitSphere())
+		return vec3.MulCoeff(color(
+			&ray.Ray{Origin: rec.P, Direction: vec3.Sub(target, rec.P)},
+			world,
+		), 0.5)
 	} else {
 		unitDirection := r.Direction.Unit()
 		t := 0.5 * (unitDirection.Y + 1.0)
@@ -57,6 +72,11 @@ func main() {
 			}
 
 			col = vec3.DivCoeff(col, raysPerPixel)
+			col = vec3.Vec3{
+				X: math.Sqrt(col.X),
+				Y: math.Sqrt(col.Y),
+				Z: math.Sqrt(col.Z),
+			}
 
 			ir := int(255.99 * col.X)
 			ig := int(255.99 * col.Y)
