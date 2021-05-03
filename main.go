@@ -73,7 +73,13 @@ func main() {
 		},
 	}
 	world := hitable.HitableList{List: list}
-	cam := camera.New()
+	cam := camera.New(
+		vec3.Vec3{X: -2, Y: 2, Z: 1},
+		vec3.Vec3{X: 0, Y: 0, Z: -1},
+		vec3.Vec3{X: 0, Y: 1, Z: 0},
+		90,
+		float64(imageWidth)/float64(imageHeight),
+	)
 
 	for j := imageHeight - 1; j >= 0; j-- {
 		for i := 0; i < imageWidth; i++ {

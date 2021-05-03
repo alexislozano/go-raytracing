@@ -1,6 +1,8 @@
 package camera
 
 import (
+	"math"
+
 	"github.com/alexislozano/go-raytracing/ray"
 	"github.com/alexislozano/go-raytracing/vec3"
 )
@@ -12,12 +14,23 @@ type Camera struct {
 	origin          vec3.Vec3
 }
 
-func New() Camera {
+func New(lookFrom vec3.Vec3, lookAt vec3.Vec3, vUp vec3.Vec3, vFov float64, aspect float64) Camera {
+	theta := vFov * math.Pi / 180
+	halfHeight := math.Tan(theta / 2)
+	halfWidth := aspect * halfHeight
+	w := vec3.Sub(lookFrom, lookAt).Unit()
+	u := vec3.Cross(vUp, w).Unit()
+	v := vec3.Cross(w, u)
 	return Camera{
-		vec3.Vec3{X: -2.0, Y: -1.0, Z: -1.0},
-		vec3.Vec3{X: 4.0, Y: 0.0, Z: 0.0},
-		vec3.Vec3{X: 0.0, Y: 2.0, Z: 0.0},
-		vec3.Vec3{X: 0.0, Y: 0.0, Z: 0.0},
+		vec3.Add4(
+			lookFrom,
+			vec3.Neg(vec3.MulCoeff(u, halfWidth)),
+			vec3.Neg(vec3.MulCoeff(v, halfHeight)),
+			vec3.Neg(w),
+		),
+		vec3.MulCoeff(u, 2*halfWidth),
+		vec3.MulCoeff(v, 2*halfHeight),
+		lookFrom,
 	}
 }
 
