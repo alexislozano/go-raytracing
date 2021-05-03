@@ -10,10 +10,6 @@ type Metal struct {
 	Fuzz   float64
 }
 
-func reflect(v vec3.Vec3, n vec3.Vec3) vec3.Vec3 {
-	return vec3.Sub(v, vec3.MulCoeff(n, 2*vec3.Dot(v, n)))
-}
-
 func (l *Metal) Scatter(r *ray.Ray, p vec3.Vec3, normal vec3.Vec3) (bool, vec3.Vec3, ray.Ray) {
 	reflected := reflect(r.Direction.Unit(), normal)
 	scattered := ray.Ray{

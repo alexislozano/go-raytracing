@@ -62,12 +62,14 @@ func main() {
 			},
 		},
 		&hitable.Sphere{
-			Center: vec3.Vec3{X: -1, Y: 0, Z: -1},
-			Radius: 0.5,
-			Material: &material.Metal{
-				Albedo: vec3.Vec3{X: 0.8, Y: 0.8, Z: 0.8},
-				Fuzz:   1,
-			},
+			Center:   vec3.Vec3{X: -1, Y: 0, Z: -1},
+			Radius:   0.5,
+			Material: &material.Dielectric{RefIdx: 1.5},
+		},
+		&hitable.Sphere{
+			Center:   vec3.Vec3{X: -1, Y: 0, Z: -1},
+			Radius:   -0.45,
+			Material: &material.Dielectric{RefIdx: 1.5},
 		},
 	}
 	world := hitable.HitableList{List: list}
