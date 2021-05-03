@@ -73,12 +73,20 @@ func main() {
 		},
 	}
 	world := hitable.HitableList{List: list}
+
+	lookFrom := vec3.Vec3{X: 3, Y: 3, Z: 2}
+	lookAt := vec3.Vec3{X: 0, Y: 0, Z: -1}
+	distToFocus := vec3.Sub(lookFrom, lookAt).Length()
+	aperture := 2.0
+
 	cam := camera.New(
-		vec3.Vec3{X: -2, Y: 2, Z: 1},
-		vec3.Vec3{X: 0, Y: 0, Z: -1},
+		lookFrom,
+		lookAt,
 		vec3.Vec3{X: 0, Y: 1, Z: 0},
-		90,
+		20,
 		float64(imageWidth)/float64(imageHeight),
+		aperture,
+		distToFocus,
 	)
 
 	for j := imageHeight - 1; j >= 0; j-- {

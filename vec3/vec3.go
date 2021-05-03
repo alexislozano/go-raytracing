@@ -85,3 +85,18 @@ func RandomInUnitSphere() Vec3 {
 	}
 	return p
 }
+
+func RandomInUnitDisk() Vec3 {
+	p := Vec3{X: 1, Y: 1, Z: 0}
+	for Dot(p, p) >= 1 {
+		p = Sub(
+			MulCoeff(Vec3{
+				rand.Float64(),
+				rand.Float64(),
+				0,
+			}, 2),
+			Vec3{X: 1, Y: 1, Z: 0},
+		)
+	}
+	return p
+}
